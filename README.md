@@ -4,8 +4,9 @@
 
 | | |
 |---|---|
-| **Live demo** | [https://genai-data-chat.vercel.app](https://genai-data-chat.vercel.app) |
+| **Live demo** | [https://singareddyai.com](https://singareddyai.com) · [https://genai-data-chat.vercel.app](https://genai-data-chat.vercel.app) |
 | **Repository** | [https://github.com/Vekri/GenAI-Data-Chat](https://github.com/Vekri/GenAI-Data-Chat) |
+| **Brand / icon** | **GenAI Data Chat** on [Singareddy AI](https://singareddyai.com) |
 | **Type** | Full-stack web app (frontend + API in one Next.js project) |
 
 ---
@@ -260,7 +261,10 @@ Open [http://localhost:3000](http://localhost:3000).
 2. Add `GROQ_API_KEY` (and optionally `GROQ_MODEL`) in Vercel env vars.
 3. Redeploy so serverless functions pick up the keys.
 
-Current production URL: **https://genai-data-chat.vercel.app**
+Current production URLs:
+
+- **https://singareddyai.com** (branded entry — GenAI Data Chat icon)
+- **https://genai-data-chat.vercel.app**
 
 ---
 

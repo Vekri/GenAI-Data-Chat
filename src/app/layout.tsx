@@ -21,8 +21,32 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "GenAI Data Chat",
-  description: "Natural language Q&A over uploaded CSVs",
+  metadataBase: new URL("https://singareddyai.com"),
+  title: {
+    default: "GenAI Data Chat",
+    template: "%s · Singareddy AI",
+  },
+  description:
+    "Natural language Q&A over uploaded CSVs — by Singareddy AI (singareddyai.com)",
+  applicationName: "GenAI Data Chat",
+  keywords: [
+    "GenAI Data Chat",
+    "Singareddy AI",
+    "CSV chat",
+    "natural language analytics",
+  ],
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/icon.svg" }],
+    shortcut: ["/favicon.svg"],
+  },
+  openGraph: {
+    title: "GenAI Data Chat",
+    description: "Natural language Q&A over uploaded CSVs",
+    url: "https://singareddyai.com",
+    siteName: "Singareddy AI",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
