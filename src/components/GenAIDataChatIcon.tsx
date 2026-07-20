@@ -3,6 +3,9 @@ type Props = {
   size?: "sm" | "md" | "lg";
   showLabel?: boolean;
   className?: string;
+  linkTarget?: "_self" | "_blank" | "_top";
+  ariaLabel?: string;
+  title?: string;
 };
 
 const sizes = {
@@ -12,10 +15,13 @@ const sizes = {
 };
 
 export function GenAIDataChatIcon({
-  href = "https://singareddyai.com",
+  href = "https://genai-data-chat.vercel.app",
   size = "md",
   showLabel = false,
   className = "",
+  linkTarget = "_self",
+  ariaLabel = "Open GenAI Data Chat",
+  title = "GenAI Data Chat",
 }: Props) {
   const s = sizes[size];
 
@@ -52,11 +58,11 @@ export function GenAIDataChatIcon({
   return (
     <a
       href={href}
-      target="_top"
-      rel="noopener noreferrer"
+      target={linkTarget}
+      rel={linkTarget === "_blank" ? "noopener noreferrer" : undefined}
       className="inline-flex cursor-pointer outline-none ring-[var(--accent)] focus-visible:ring-2 rounded-2xl"
-      aria-label="Go to singareddyai.com"
-      title="singareddyai.com"
+      aria-label={ariaLabel}
+      title={title}
     >
       {content}
     </a>
