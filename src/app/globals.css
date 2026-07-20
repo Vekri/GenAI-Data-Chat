@@ -48,6 +48,10 @@ body {
   animation: rise 420ms ease-out both;
 }
 
+.app-icon-tile {
+  cursor: pointer;
+}
+
 ::selection {
   background: color-mix(in oklab, var(--accent) 45%, transparent);
 }

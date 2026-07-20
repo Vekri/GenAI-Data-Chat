@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { ChatPanel } from "@/components/ChatPanel";
 import { CsvUploader } from "@/components/CsvUploader";
 import { DataPreview } from "@/components/DataPreview";
+import { GenAIDataChatIcon } from "@/components/GenAIDataChatIcon";
 import { buildDataset } from "@/lib/csv";
 import type { CsvDataset } from "@/lib/types";
 import Papa from "papaparse";
@@ -41,30 +42,15 @@ export default function Home() {
 
       <header className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-5 pb-2 pt-6 sm:px-8">
         <div className="flex items-center gap-3 sm:gap-4">
-          <a
-            href="https://singareddyai.com"
-            className="group flex shrink-0 items-center gap-3 rounded-2xl outline-none ring-[var(--accent)] focus-visible:ring-2"
-            aria-label="GenAI Data Chat on singareddyai.com"
-          >
-            <span className="relative grid h-12 w-12 place-items-center overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-[0_8px_24px_rgba(4,20,28,0.35)] transition group-hover:border-[var(--accent-soft)]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/icon.svg"
-                alt=""
-                width={40}
-                height={40}
-                className="h-10 w-10"
-              />
-            </span>
-            <span>
-              <p className="text-xs uppercase tracking-[0.28em] text-[var(--accent-soft)]">
-                singareddyai.com
-              </p>
-              <h1 className="font-[family-name:var(--font-display)] text-2xl tracking-tight text-[var(--ink)] sm:text-4xl">
-                GenAI Data Chat
-              </h1>
-            </span>
-          </a>
+          <GenAIDataChatIcon href="https://singareddyai.com" size="lg" />
+          <div>
+            <p className="text-xs uppercase tracking-[0.28em] text-[var(--accent-soft)]">
+              singareddyai.com
+            </p>
+            <h1 className="font-[family-name:var(--font-display)] text-2xl tracking-tight text-[var(--ink)] sm:text-4xl">
+              GenAI Data Chat
+            </h1>
+          </div>
         </div>
         <button
           type="button"
