@@ -39,7 +39,10 @@ export async function POST(request: Request) {
     }
 
     const message = err instanceof Error ? err.message : "Unexpected error.";
-    const status = message.includes("OPENAI_API_KEY") ? 401 : 500;
+    const status =
+      message.includes("API key") || message.includes("GROQ_API_KEY")
+        ? 401
+        : 500;
     return NextResponse.json({ error: message }, { status });
   }
 }

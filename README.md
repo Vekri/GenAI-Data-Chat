@@ -17,11 +17,13 @@ Natural language Q&A over uploaded CSVs. Ask questions in plain English; the app
 npm install
 ```
 
-2. Copy env and add your OpenAI key:
+2. Copy env and add a free Groq key (or OpenAI):
 
 ```bash
 cp .env.example .env.local
 ```
+
+Get a free key at [console.groq.com](https://console.groq.com) (no credit card) and set `GROQ_API_KEY`.
 
 3. Start the dev server:
 
@@ -46,4 +48,4 @@ Each answer can include the query used and a result table.
 
 - Dataset stays in memory for the browser session (not persisted to disk)
 - Large payloads are capped at 20k rows per request
-- Requires an `OPENAI_API_KEY` in `.env.local`
+- Requires `GROQ_API_KEY` (free) or `OPENAI_API_KEY` in `.env.local` / Vercel env

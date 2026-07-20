@@ -14,16 +14,33 @@ const PlanResponseSchema = z.object({
 });
 
 function getClient() {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    throw new Error(
-      "Missing OPENAI_API_KEY. Add it to .env.local to enable GenAI answers.",
-    );
+  // Prefer Groq (free tier) when GROQ_API_KEY is set.
+  const groqKey = process.env.GROQ_API_KEY?.trim();
+  if (groqKey) {
+    return new OpenAI({
+      apiKey: groqKey,
+      baseURL: "https://api.groq.com/openai/v1",
+    });
   }
-  return new OpenAI({ apiKey });
+
+  const openaiKey = process.env.OPENAI_API_KEY?.trim();
+  if (openaiKey) {
+    return new OpenAI({ apiKey: openaiKey });
+  }
+
+  throw new Error(
+    "Missing API key. Set GROQ_API_KEY (free at console.groq.com) or OPENAI_API_KEY.",
+  );
 }
 
 function getModel() {
+  if (process.env.GROQ_API_KEY?.trim()) {
+    return (
+      process.env.GROQ_MODEL?.trim() ||
+      process.env.OPENAI_MODEL?.trim() ||
+      "llama-3.1-8b-instant"
+    );
+  }
   return process.env.OPENAI_MODEL?.trim() || "gpt-4o-mini";
 }
 
