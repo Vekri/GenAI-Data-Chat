@@ -52,9 +52,11 @@ export function GenAIDataChatIcon({
   return (
     <a
       href={href}
-      className="inline-flex outline-none ring-[var(--accent)] focus-visible:ring-2 rounded-2xl"
-      aria-label="Open GenAI Data Chat on singareddyai.com"
-      title="GenAI Data Chat"
+      target="_top"
+      rel="noopener noreferrer"
+      className="inline-flex cursor-pointer outline-none ring-[var(--accent)] focus-visible:ring-2 rounded-2xl"
+      aria-label="Go to singareddyai.com"
+      title="singareddyai.com"
     >
       {content}
     </a>

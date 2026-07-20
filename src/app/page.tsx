@@ -43,14 +43,19 @@ export default function Home() {
       <header className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-5 pb-2 pt-6 sm:px-8">
         <div className="flex items-center gap-3 sm:gap-4">
           <GenAIDataChatIcon href="https://singareddyai.com" size="lg" />
-          <div>
-            <p className="text-xs uppercase tracking-[0.28em] text-[var(--accent-soft)]">
+          <a
+            href="https://singareddyai.com"
+            target="_top"
+            rel="noopener noreferrer"
+            className="group rounded-xl outline-none ring-[var(--accent)] focus-visible:ring-2"
+          >
+            <p className="text-xs uppercase tracking-[0.28em] text-[var(--accent-soft)] group-hover:text-[var(--accent)]">
               singareddyai.com
             </p>
-            <h1 className="font-[family-name:var(--font-display)] text-2xl tracking-tight text-[var(--ink)] sm:text-4xl">
+            <h1 className="font-[family-name:var(--font-display)] text-2xl tracking-tight text-[var(--ink)] transition group-hover:text-[var(--accent-soft)] sm:text-4xl">
               GenAI Data Chat
             </h1>
-          </div>
+          </a>
         </div>
         <button
           type="button"
