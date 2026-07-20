@@ -11,33 +11,43 @@ const BodySchema = z.object({
   question: z.string().trim().min(1).max(2000),
   datasetName: z.string().min(1).max(200),
   columns: z.array(ColumnSchema).min(1).max(200),
-  rows: z.array(z.record(z.string(), z.unknown())).min(1).max(20000),
+  rows: z.array(z.record(z.string(), z.any())).min(1).max(20000),
 });
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
 export async function POST(request: Request) {
+  let json: unknown;
   try {
-    const json = await request.json();
-    const body = BodySchema.parse(json);
+    json = await request.json();
+  } catch {
+    return NextResponse.json(
+      { error: "Request body must be valid JSON." },
+      { status: 400 },
+    );
+  }
 
+  const parsed = BodySchema.safeParse(json);
+  if (!parsed.success) {
+    return NextResponse.json(
+      {
+        error: "Invalid request payload.",
+        details: parsed.error.flatten(),
+      },
+      { status: 400 },
+    );
+  }
+
+  try {
     const result = await answerQuestion({
-      question: body.question,
-      datasetName: body.datasetName,
-      columns: body.columns,
-      rows: body.rows,
+      question: parsed.data.question,
+      datasetName: parsed.data.datasetName,
+      columns: parsed.data.columns,
+      rows: parsed.data.rows,
     });
-
     return NextResponse.json(result);
   } catch (err) {
-    if (err instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Invalid request payload.", details: err.flatten() },
-        { status: 400 },
-      );
-    }
-
     const message = err instanceof Error ? err.message : "Unexpected error.";
     const status =
       message.includes("API key") || message.includes("GROQ_API_KEY")

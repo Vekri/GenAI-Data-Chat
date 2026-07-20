@@ -9,12 +9,11 @@ import { describePlan, QueryPlanSchema, runQueryPlan } from "./query";
 import type { ChatResponse, CsvColumn } from "./types";
 
 const PlanResponseSchema = z.object({
-  plan: QueryPlanSchema.nullable(),
+  plan: QueryPlanSchema.nullish(),
   rationale: z.string().optional(),
 });
 
 function getClient() {
-  // Prefer Groq (free tier) when GROQ_API_KEY is set.
   const groqKey = process.env.GROQ_API_KEY?.trim();
   if (groqKey) {
     return new OpenAI({
@@ -38,7 +37,7 @@ function getModel() {
     return (
       process.env.GROQ_MODEL?.trim() ||
       process.env.OPENAI_MODEL?.trim() ||
-      "llama-3.1-8b-instant"
+      "llama-3.3-70b-versatile"
     );
   }
   return process.env.OPENAI_MODEL?.trim() || "gpt-4o-mini";
@@ -53,6 +52,20 @@ function extractJson(text: string): unknown {
     if (!match) throw new Error("Model did not return JSON.");
     return JSON.parse(match[0]);
   }
+}
+
+function normalizePlanPayload(raw: unknown): unknown {
+  if (!raw || typeof raw !== "object") return raw;
+  const obj = raw as Record<string, unknown>;
+
+  // Some models nest under "query" / return the plan at the top level.
+  if (!("plan" in obj) && Array.isArray(obj.select)) {
+    return { plan: obj, rationale: obj.rationale };
+  }
+  if (!("plan" in obj) && obj.query && typeof obj.query === "object") {
+    return { plan: obj.query, rationale: obj.rationale };
+  }
+  return obj;
 }
 
 async function generatePlan(
@@ -80,7 +93,21 @@ async function generatePlan(
   });
 
   const content = completion.choices[0]?.message?.content ?? "{}";
-  return PlanResponseSchema.parse(extractJson(content));
+  const normalized = normalizePlanPayload(extractJson(content));
+  const parsed = PlanResponseSchema.safeParse(normalized);
+
+  if (!parsed.success) {
+    return {
+      plan: null,
+      rationale:
+        "I could not build a valid analysis plan for that question. Try asking about a specific column (e.g. total revenue by region).",
+    };
+  }
+
+  return {
+    plan: parsed.data.plan ?? null,
+    rationale: parsed.data.rationale,
+  };
 }
 
 async function summarizeAnswer(

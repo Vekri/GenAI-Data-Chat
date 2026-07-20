@@ -1,37 +1,64 @@
 import { z } from "zod";
 import type { ResultTable } from "./types";
 
+const AggSchema = z.preprocess((v) => {
+  if (v === undefined || v === null || v === "") return "none";
+  const s = String(v).toLowerCase();
+  if (s === "count_distinct" || s === "count(*)") return "count";
+  return s;
+}, z.enum(["none", "count", "sum", "avg", "min", "max"]));
+
+const OpSchema = z.preprocess((v) => {
+  const s = String(v ?? "eq").toLowerCase();
+  const map: Record<string, string> = {
+    "=": "eq",
+    "==": "eq",
+    "!=": "neq",
+    "<>": "neq",
+    ">": "gt",
+    ">=": "gte",
+    "<": "lt",
+    "<=": "lte",
+    like: "contains",
+    ilike: "contains",
+  };
+  return map[s] ?? s;
+}, z.enum(["eq", "neq", "gt", "gte", "lt", "lte", "contains"]));
+
+const SelectItemSchema = z.object({
+  column: z.preprocess((v) => {
+    if (v === undefined || v === null || v === "" || v === "*") return null;
+    return String(v);
+  }, z.string().nullable()),
+  agg: AggSchema.default("none"),
+  as: z.string().optional(),
+});
+
+const WhereItemSchema = z.object({
+  column: z.string(),
+  op: OpSchema.default("eq"),
+  value: z.union([z.string(), z.number(), z.boolean(), z.null()]),
+});
+
+const OrderItemSchema = z.object({
+  column: z.string(),
+  dir: z.preprocess((v) => {
+    const s = String(v ?? "asc").toLowerCase();
+    return s.startsWith("desc") ? "desc" : "asc";
+  }, z.enum(["asc", "desc"])),
+});
+
 export const QueryPlanSchema = z.object({
-  select: z
-    .array(
-      z.object({
-        column: z.string().nullable(),
-        agg: z
-          .enum(["none", "count", "sum", "avg", "min", "max"])
-          .default("none"),
-        as: z.string().optional(),
-      }),
-    )
-    .min(1),
-  where: z
-    .array(
-      z.object({
-        column: z.string(),
-        op: z.enum(["eq", "neq", "gt", "gte", "lt", "lte", "contains"]),
-        value: z.union([z.string(), z.number(), z.boolean(), z.null()]),
-      }),
-    )
-    .default([]),
+  select: z.array(SelectItemSchema).min(1),
+  where: z.array(WhereItemSchema).default([]),
   groupBy: z.array(z.string()).default([]),
-  orderBy: z
-    .array(
-      z.object({
-        column: z.string(),
-        dir: z.enum(["asc", "desc"]).default("asc"),
-      }),
-    )
-    .default([]),
-  limit: z.number().int().positive().max(200).nullable().default(50),
+  orderBy: z.array(OrderItemSchema).default([]),
+  limit: z.preprocess((v) => {
+    if (v === undefined || v === null || v === "") return 50;
+    if (v === "null") return null;
+    const n = Number(v);
+    return Number.isFinite(n) ? n : 50;
+  }, z.number().int().positive().max(200).nullable()),
 });
 
 export type QueryPlan = z.infer<typeof QueryPlanSchema>;
@@ -99,8 +126,12 @@ function aggregate(values: unknown[], agg: QueryPlan["select"][number]["agg"]) {
 export function describePlan(plan: QueryPlan): string {
   const select = plan.select
     .map((s) => {
-      const label = s.as || (s.agg === "none" ? s.column : `${s.agg}(${s.column ?? "*"})`);
-      return s.agg === "none" ? String(s.column) : `${s.agg.toUpperCase()}(${s.column ?? "*"}) AS ${label}`;
+      const label =
+        s.as ||
+        (s.agg === "none" ? s.column : `${s.agg}(${s.column ?? "*"})`);
+      return s.agg === "none"
+        ? String(s.column)
+        : `${s.agg.toUpperCase()}(${s.column ?? "*"}) AS ${label}`;
     })
     .join(", ");
   const where =
@@ -149,9 +180,11 @@ export function runQueryPlan(
       for (const s of plan.select) {
         const name =
           s.as ||
-          (s.agg === "none" ? String(s.column) : `${s.agg}_${s.column ?? "all"}`);
+          (s.agg === "none"
+            ? String(s.column)
+            : `${s.agg}_${s.column ?? "all"}`);
         if (s.agg === "none") {
-          out[name] = s.column ? bucket[0]?.[s.column] ?? null : null;
+          out[name] = s.column ? (bucket[0]?.[s.column] ?? null) : null;
         } else {
           const values = s.column
             ? bucket.map((r) => r[s.column as string])
@@ -166,7 +199,7 @@ export function runQueryPlan(
       const out: Record<string, unknown> = {};
       for (const s of plan.select) {
         const name = s.as || String(s.column);
-        out[name] = s.column ? row[s.column] ?? null : null;
+        out[name] = s.column ? (row[s.column] ?? null) : null;
       }
       return out;
     });
@@ -192,7 +225,9 @@ export function runQueryPlan(
       : plan.select.map(
           (s) =>
             s.as ||
-            (s.agg === "none" ? String(s.column) : `${s.agg}_${s.column ?? "all"}`),
+            (s.agg === "none"
+              ? String(s.column)
+              : `${s.agg}_${s.column ?? "all"}`),
         );
 
   return { columns, rows: resultRows };
