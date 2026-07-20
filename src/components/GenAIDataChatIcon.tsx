@@ -11,7 +11,7 @@ type Props = {
 const sizes = {
   sm: { tile: "h-11 w-11 rounded-xl", icon: 28, label: "text-xs" },
   md: { tile: "h-14 w-14 rounded-2xl", icon: 36, label: "text-sm" },
-  lg: { tile: "h-20 w-20 rounded-[1.35rem]", icon: 52, label: "text-base" },
+  lg: { tile: "h-24 w-24 rounded-[1.35rem]", icon: 60, label: "text-sm" },
 };
 
 export function GenAIDataChatIcon({
@@ -45,7 +45,7 @@ export function GenAIDataChatIcon({
       {showLabel ? (
         <span
           className={[
-            "max-w-[5.5rem] text-center font-medium leading-tight text-[var(--ink-soft)]",
+            "max-w-[7rem] text-center font-[family-name:var(--font-display)] font-semibold leading-tight text-[var(--ink)]",
             s.label,
           ].join(" ")}
         >
