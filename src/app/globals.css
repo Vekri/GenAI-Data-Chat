@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #08151c;
+  --surface: #10232c;
+  --surface-2: #14303b;
+  --border: #244652;
+  --ink: #f2fbf8;
+  --ink-soft: #d5e8e2;
+  --muted: #8eaaa3;
+  --accent: #3dcfb6;
+  --accent-soft: #7ee0cd;
+  --accent-ink: #042019;
+  --accent-glow: rgba(61, 207, 182, 0.35);
+  --danger: #ff8f8f;
+  --code-bg: #071118;
+  --code-fg: #b7f5e6;
+  --blob-a: rgba(61, 207, 182, 0.22);
+  --blob-b: rgba(56, 120, 168, 0.28);
+  --grid: rgba(180, 220, 210, 0.06);
+}
+
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--ink);
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-rise {
+  animation: rise 420ms ease-out both;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--accent) 45%, transparent);
+}

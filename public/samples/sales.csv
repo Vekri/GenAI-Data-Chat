@@ -1,0 +1,21 @@
+order_id,order_date,region,product,category,units,unit_price,revenue,customer
+1001,2024-01-05,West,Nova Laptop,Electronics,2,1200,2400,Aisha Khan
+1002,2024-01-08,East,Orbit Mouse,Accessories,5,35,175,Ben Ortiz
+1003,2024-01-12,South,Pulse Headphones,Electronics,3,180,540,Cara Ng
+1004,2024-01-15,West,Desk Mat Pro,Accessories,4,42,168,Devon Lee
+1005,2024-01-20,North,Nova Laptop,Electronics,1,1200,1200,Elena Ruiz
+1006,2024-02-02,East,Cloud Webcam,Electronics,2,95,190,Farah Ali
+1007,2024-02-06,South,Orbit Mouse,Accessories,8,35,280,Gabe Stone
+1008,2024-02-11,West,Pulse Headphones,Electronics,2,180,360,Hana Park
+1009,2024-02-18,North,Desk Mat Pro,Accessories,6,42,252,Ivan Petrov
+1010,2024-03-01,East,Nova Laptop,Electronics,3,1150,3450,Jules Meyer
+1011,2024-03-04,South,Cloud Webcam,Electronics,4,90,360,Kai Brooks
+1012,2024-03-09,West,Orbit Mouse,Accessories,10,32,320,Lina Costa
+1013,2024-03-14,North,Pulse Headphones,Electronics,1,175,175,Maya Chen
+1014,2024-03-21,East,Desk Mat Pro,Accessories,3,40,120,Noah Patel
+1015,2024-04-02,South,Nova Laptop,Electronics,2,1180,2360,Omar Diaz
+1016,2024-04-08,West,Cloud Webcam,Electronics,5,88,440,Priya Shah
+1017,2024-04-12,North,Orbit Mouse,Accessories,7,34,238,Quinn Blake
+1018,2024-04-19,East,Pulse Headphones,Electronics,4,170,680,Ravi Menon
+1019,2024-04-25,South,Desk Mat Pro,Accessories,2,45,90,Sofia Berg
+1020,2024-05-03,West,Nova Laptop,Electronics,1,1225,1225,Tom Hughes
